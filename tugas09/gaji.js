@@ -10,15 +10,23 @@ class Karyawan {
     }
 
     hitungTotalGaji() {
-        let tarif;
+        let gajiPerJamAwal, gajiPerJamSelanjutnya;
+        
         if (this.jenis === 'penuh_waktu') {
-            tarif = this.jamKerjaPerHari > 6 ? 75000 : 100000;
+            gajiPerJamAwal = 100000;
+            gajiPerJamSelanjutnya = 75000;
         } else if (this.jenis === 'paruh_waktu') {
-            tarif = this.jamKerjaPerHari > 6 ? 30000 : 50000;
+            gajiPerJamAwal = 50000;
+            gajiPerJamSelanjutnya = 30000;
         } else {
             throw new Error('Jenis karyawan tidak valid');
         }
-        return this.jamKerjaPerHari * tarif;
+
+        const jamAwal = Math.min(this.jamKerjaPerHari, 6);
+        const jamSelanjutnya = Math.max(this.jamKerjaPerHari - 6, 0);
+
+        const totalGaji = (jamAwal * gajiPerJamAwal) + (jamSelanjutnya * gajiPerJamSelanjutnya);
+        return totalGaji;
     }
 }
 
@@ -34,7 +42,7 @@ class KaryawanParuhWaktu extends Karyawan {
     }
 }
 
-// Contoh penggunaan
-const karyawanPenuhWaktu = new KaryawanPenuhWaktu('Adawiyah');
+// =========TESTER=========
+const karyawanPenuhWaktu = new KaryawanParuhWaktu('FINZA');
 karyawanPenuhWaktu.tambahJamKerja(8); // Menambah jam kerja per hari
 console.log(`${karyawanPenuhWaktu.nama} memiliki total gaji: Rp ${karyawanPenuhWaktu.hitungTotalGaji()}`);
